@@ -23,9 +23,9 @@ print(f"S-au comandat {guiasu} guias, {cefe} ceafa, {papanas} papanasi.")
 
 print(f"Mai sunt {len(tavi)} tavi.")
 
-print(f"Mai este ceafa: {(meniu.count('ceafa') - cefe) <= 0}")
-print(f"Mai sunt papanasi: {(meniu.count('papanasi') - papanas) <= 0}")
-print(f"Mai sunt guias: {(meniu.count('guias') - guiasu) <= 0}")
+print(f"Mai este ceafa: {(meniu.count('ceafa') - cefe) > 0}")
+print(f"Mai sunt papanasi: {(meniu.count('papanasi') - papanas) > 0}")
+print(f"Mai sunt guias: {(meniu.count('guias') - guiasu) > 0}")
 
 total_bani=0
 for i in range(len(istoric_comenzi)):
