@@ -37,7 +37,7 @@ for i in range(len(istoric_comenzi)):
     if comandanecesara=="papanasi":
         total_bani += 7
     if comandanecesara=="guias":
-        total_bani += 10
+        total_bani += 5
 
 print(f"Cantina a încasat: {total_bani} lei")
 produse_max_7_lei = [produs for produs in preturi if produs[1] <= 7]
