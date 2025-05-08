@@ -1,28 +1,110 @@
-opera= """Guvernul a aprobat, miercuri, suplimentarea bugetului Ministerului Justiţiei cu peste 2,8 milioane lei pentru continuarea proiectelor în curs. Printre ele se numără și suma necesară acoperirii serviciilor de consultanță pentru modernizarea Palatului de Justiție din Cluj-Napoca.
+import customtkinter as ctk
+from datetime import date
 
-„Toate investiţiile aflate în desfăşurare sunt pentru ca cetăţenii plătitori de impozite şi taxe să beneficieze de un serviciu public de calitate, de sedii de instanţe spaţioase, moderne. În plus, este vorba despre asigurarea unor condiţii de lucru corespunzătoare pentru magistraţi şi pentru personalul auxiliar. Suplimentarea bugetului Ministerului Justiţiei era mai mult decât necesară pentru că avem multe proiecte în desfăşurare, inclusiv dintre cele care vizează asigurarea încălzirii corespunzătoare în perioada de iarnă. Îi mulţumesc ministrului Boloş pentru înţelegere şi suport”, a declarat Gorghiu, citată de Agerpres.
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
 
-Palatul de Justiție Cluj-Napoca va fi reabilitat
-Asocierea Bog’Art (lider) – Athenaeum Construct – Popp & Asociatii, ACI Cluj – UTI Construction and Facility Management – Electroproiect, alaturi de Schindler Romania, ca subcontractant, a castigat contractul de modernizare a clădirii Palatului de Justitie Cluj-Napoca, în urma licitației organizate de Curtea de Apel Cluj.""" # Un sir de caractere
-splitting= len(opera) // 2 # len = cate caractere are
-first_half= opera[:splitting] # for-u cela cu inceput:final:pas (default e 0 , last, +1)
-first_half=first_half.strip() # pentru a filtra
-first_half= first_half.upper() # pt caps
-second_half= opera[splitting:] # Second half
-second_half_inv=second_half[::-1] # pentru a atribui NOUL SIR PENTRU CA NU POTI SA LE MODIFIC IN PYTHON
-second_half_3=second_half_inv.capitalize() # PENTRU A ATRIBUI IAR UN NOU SIR # ADORAM PYTHON
-second_half_4=second_half_3.replace('.','').replace('!','').replace(',','').replace('?','') # Replace-ul
-print(first_half + second_half_4)
+app = ctk.CTk()
+app.title("Age Calculator (Calculator de Varsta)")
+app.geometry("500x500")
 
+# ---------- Functia de calcul ----------
 
-# Scrie un program în Python care declara un sir cu continutul copiat de pe internet, dintr-un articol de stiri in limba romana și efectuează pe acel articol(care este stocat ca un sir de caractere) următoarele operații:
-#
-# Împarte șirul în două părți egale. Dacă numărul de caractere este impar, prima parte va avea un caracter în plus.
-# Pe prima parte:
-# Transformă toate literele în majuscule.
-# Elimină toate spațiile goale de la începutul și finalul șirului.
-# Pe a doua parte:
-# Inversează ordinea caracterelor.
-# Transformă prima literă în majusculă.
-# Elimină toate caracterele de punctuație (., ,, !, ?) din această parte.
-# Combină cele două părți și afișează rezultatul.
+def calculeaza_varsta():
+    try:
+        zi_n = int(entry_zi_n.get())
+        luna_n = int(entry_luna_n.get())
+        an_n = int(entry_an_n.get())
+        zi_r = int(entry_zi_r.get())
+        luna_r = int(entry_luna_r.get())
+        an_r = int(entry_an_r.get())
+
+        data_nastere = date(an_n, luna_n, zi_n)
+        data_referinta = date(an_r, luna_r, zi_r)
+
+        if data_nastere > data_referinta:
+            rezultat_varsta.configure(text="Eroare: Data nasterii este dupa data de referinta.")
+            rezultat_viata.configure(text="")
+            return
+
+        ani = an_r - an_n
+        luni = luna_r - luna_n
+        zile = zi_r - zi_n
+
+        if zile < 0:
+            luni -= 1
+            zile += 30
+        if luni < 0:
+            ani -= 1
+            luni += 12
+
+        rezultat_varsta.configure(text=f"Varsta: {ani} ani, {luni} luni, {zile} zile")
+
+        # Calculul probabilitatii de viata
+        if ani < 40:
+            sansa = 100
+        elif 40 <= ani < 50:
+            sansa = 100 - (ani - 40) * 1.5
+        elif 50 <= ani < 60:
+            sansa = 100 - (ani - 50) * 2
+        elif 60 <= ani < 70:
+            sansa = 100 - (ani - 60) * 3
+        else:
+            sansa = 100 - (ani - 70) * 5
+
+        if sansa < 0:
+            sansa = 0
+
+        if sansa > 80:
+            mesaj = "Probabil in viata"
+        elif sansa > 50:
+            mesaj = "Sanse moderate"
+        elif sansa > 20:
+            mesaj = "Putin probabil"
+        else:
+            mesaj = "Aproape imposibil"
+
+        rezultat_viata.configure(text=f"Posibilitate sa fie in viata: {sansa}% — {mesaj}")
+
+    except:
+        rezultat_varsta.configure(text="Introduceti doar numere valide.")
+        rezultat_viata.configure(text="")
+
+# ---------- Meniu ----------
+
+label_titlu = ctk.CTkLabel(app, text="DATA NASTERII", font=ctk.CTkFont(size=20, weight="bold"))
+label_titlu.pack(pady=10)
+
+frame_dob = ctk.CTkFrame(app)
+frame_dob.pack(pady=5)
+
+entry_zi_n = ctk.CTkEntry(frame_dob, placeholder_text="Zi")
+entry_luna_n = ctk.CTkEntry(frame_dob, placeholder_text="Luna")
+entry_an_n = ctk.CTkEntry(frame_dob, placeholder_text="An")
+entry_zi_n.pack(side="left", padx=5)
+entry_luna_n.pack(side="left", padx=5)
+entry_an_n.pack(side="left", padx=5)
+
+label_ref = ctk.CTkLabel(app, text="DATA ALEASA", font=ctk.CTkFont(size=20, weight="bold"))
+label_ref.pack(pady=10)
+
+frame_ref = ctk.CTkFrame(app)
+frame_ref.pack(pady=5)
+
+entry_zi_r = ctk.CTkEntry(frame_ref, placeholder_text="Zi")
+entry_luna_r = ctk.CTkEntry(frame_ref, placeholder_text="Luna")
+entry_an_r = ctk.CTkEntry(frame_ref, placeholder_text="An")
+entry_zi_r.pack(side="left", padx=5)
+entry_luna_r.pack(side="left", padx=5)
+entry_an_r.pack(side="left", padx=5)
+
+btn_calculeaza = ctk.CTkButton(app, text="Calculeaza", command=calculeaza_varsta)
+btn_calculeaza.pack(pady=20)
+
+rezultat_varsta = ctk.CTkLabel(app, text="", font=ctk.CTkFont(size=16))
+rezultat_varsta.pack(pady=5)
+
+rezultat_viata = ctk.CTkLabel(app, text="", font=ctk.CTkFont(size=16))
+rezultat_viata.pack(pady=5)
+
+app.mainloop()
